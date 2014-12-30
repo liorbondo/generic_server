@@ -1,0 +1,42 @@
+/*****************************************************
+Author:             Lior Bondorevsky
+Creation date:      20/12/2014
+Last modofied date: 20/12/2014
+Description:        File Operations Inline Fucntions
+*****************************************************/
+#ifndef __FILE_OPERATIONS__
+#define __FILE_OPERATIONS__
+
+#include <iostream> // cout, endl, cerr
+#include <fstream>  // ifstream
+#include <string>   // string
+
+#define SYS_ERR -1
+#define OK       0
+
+using namespace std;
+
+namespace adv_cpp
+{
+inline int PrintFile(const char* _fileName)
+{
+  string line;
+  ifstream file(_fileName);
+  if(!file.is_open())
+  {
+    cerr << "Unable to open file " << _fileName << endl;    
+    return SYS_ERR;
+  }
+  
+  while(getline(file, line))
+  {
+    cout << line << endl;
+  }
+  file.close();
+  
+  return OK;
+}
+
+} // namespace adv_cpp
+
+#endif // ifndef __FILE_OPERATIONS__

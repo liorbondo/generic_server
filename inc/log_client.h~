@@ -1,0 +1,41 @@
+/*******************************************************
+Author:             Lior Bondorevsky
+Creation date:      10/12/2014
+Last modofied date: 10/12/2014
+Description:        Log Client API
+*******************************************************/
+#ifndef __LOG_CLIENT__
+#define __LOG_CLIENT__
+
+#include "event_handler.h" // Inheritance
+#include "handle_timer_protocol.h" // HandleTimerParam
+
+namespace adv_cpp
+{
+
+class LogClient : public EventHandler
+{
+public:
+  LogClient();
+  virtual ~LogClient();
+  
+  virtual int Open();
+  virtual int HandleTimer(void* _arg);
+  virtual int HandleOutput(int fd);
+  virtual int HandleClose(int fd);
+  
+  void SetTimer(TimerId);
+  TimerId GetTimer() const;
+  
+private:
+  HandleTimerParam m_handleTimerParam;
+  struct sockaddr_in m_serverAddr;
+  
+  TimerId m_timer;
+  
+};
+
+
+} // namespace adv_cpp
+
+#endif // ifndef __LOG_CLIENT__

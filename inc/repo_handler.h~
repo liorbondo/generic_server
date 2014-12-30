@@ -1,0 +1,51 @@
+/*******************************************************
+Author:             Lior Bondorevsky
+Creation date:      17/12/2014
+Last modofied date: 20/12/2014
+Description:        FileServer Repo Handler API
+*******************************************************/
+#ifndef __FS_REPO_HANDLER__
+#define __FS_REPO_HANDLER__
+
+#include "event_handler.h" // Inheritance
+
+namespace adv_cpp
+{
+
+class FsRepoHandler : public EventHandler
+{
+public:
+  FsRepoHandler();
+  virtual ~FsRepoHandler();
+  
+  virtual int Open();
+  virtual int HandleTimer(void* _arg);
+  virtual int HandleInput(int fd);
+  virtual int HandleOutput(int fd);
+  virtual int HandleClose(int fd);
+  virtual int HandleSignal(int signal);
+  
+private:
+  int m_id;
+  FILE*  m_filesList;
+  size_t m_fileOffset;
+  size_t m_bufferOffset;
+  size_t m_currReadSize;
+  bool   m_isEof;
+  static const size_t BUFFER_SIZE = 65536;
+  char m_buffer[BUFFER_SIZE];
+  static const char* FILES_LIST_PATH;
+  static const int   EOF_STATUS;
+  static const int   CONN_CLOSED_STATUS;
+  
+  int WriteFileToSocket();
+  int ReadSocketToBuffer();
+  int SendHeader();
+  int HandleDiscovery();
+  int HandleGSFG();
+};
+
+
+} // namespace adv_cpp
+
+#endif // ifndef __FS_REPO_HANDLER__

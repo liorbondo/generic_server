@@ -1,0 +1,71 @@
+/********************************************
+Author: 			 			Lior Bondorevsky
+Creation date: 			17/12/2014
+Last modofied date: 20/12/2014
+Description: 				FileServer single client
+********************************************/
+#include <iostream> // cout, endl
+#include <string>   // string
+#include <cstdlib>  // system
+
+#include "fileserver_protocolos.h" // RepoProtocol
+#include "file_operations.h"       // PrintFile
+#include "fileserver_common.h"     // IpPort
+
+#define SYS_ERR -1
+#define OK       0
+
+#define PRINT_MSG(MSG)  (cout << "(*) " << (MSG) << endl << endl)
+#define PRINT_ERR(ERR)  (cerr << "(!) " << (ERR) << endl << endl)
+
+using namespace adv_cpp;
+using std::cout;
+using std::cin;
+using std::cerr;
+using std::endl;
+using std::string;
+
+static const char* CLIENT_FILENAME = "/home/lior/test/client/discovery_file"; // "client.tar.gz";
+static const int   CLIENT_ID = 99;
+
+static const char* SERVER_IP = "127.0.0.1";
+static const short REPO_PORT = 5061;
+
+
+int main()
+{
+  system("clear");
+  // Repository init --> throws exception if ctor failed
+  RepoProtocol repo(SERVER_IP, REPO_PORT, CLIENT_ID);
+  
+  // DISCOVERY PART
+  PRINT_MSG("client sending DISCOVERY");
+  if(!repo.Discovery(CLIENT_FILENAME))
+  {
+    PRINT_ERR("Discovery Failed!");
+  }
+  PRINT_MSG("Repository Files List: Transfer & MD5 Checksum OK :)");
+  
+  PRINT_MSG("Printing repository discovery file:");
+  PrintFile(CLIENT_FILENAME);
+         
+  // GET_SERV_FOR_GET PART
+  cout << "Specify filename (for get): ";
+  string chosenFilename;
+  cin >> chosenFilename;
+  cout << endl;
+  
+  IpPort ipp1, ipp2;
+  if(!repo.GetServersForGet(chosenFilename.c_str(), &ipp1, &ipp2))
+  {
+    PRINT_ERR("GetServersForGet Failed!");
+  }
+  PRINT_MSG("GetServersForGet OK :)");
+  
+  ipp1.Print();
+  ipp2.Print();
+  
+  cout << endl;
+  
+	return OK;
+}

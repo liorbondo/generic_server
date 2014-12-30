@@ -1,0 +1,27 @@
+/*****************************************
+Author:             Lior Bondorevsky
+Creation date:      10/12/2014
+Last modofied date: 10/12/2014
+Description:        HandleTimer Param
+*****************************************/
+#ifndef __HANDLE_TIMER_PARAM__
+#define __HANDLE_TIMER_PARAM__
+
+#include <sys/select.h> // fdset XXX maybe wrong
+
+class EventHandler;
+class std::list<EventHandler*>;
+
+namespace adv_cpp
+{
+
+struct HandleTimerParam
+{
+  std::list<EventHandler*>* m_appHandlerTable;
+  int   m_socket;
+  fdset m_readSet;
+};
+
+} // namespace adv_cpp
+
+#endif // ifndef __HANDLE_TIMER_PROTOCOL__
